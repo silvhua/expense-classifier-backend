@@ -1,6 +1,6 @@
 import json
 import pandas as pd
-# import requests
+import openai
 
 
 def lambda_handler(event, context):

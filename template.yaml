@@ -25,6 +25,23 @@ Resources:
           Properties:
             Path: /hello
             Method: get
+      Layers:
+        - arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python312:13 # from https://aws-sdk-pandas.readthedocs.io/en/3.9.1/layers.html
+
+  OpenaiLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: OpenaiLayer
+      Description: Openai dependencies.
+      ContentUri: s3://datajam-expense-parser/lambda-layers/openai_layer.zip
+
+  GoogleDocumentaiLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: GoogleDocumentaiLayer
+      Description: Google Documentai dependencies.
+      ContentUri: s3://datajam-expense-parser/lambda-layers/google_documentai_layer.zip
+
   LambdaFunctionRole:
     Type: AWS::IAM::Role
     Properties:

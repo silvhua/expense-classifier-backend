@@ -5,7 +5,7 @@ codeuri = "/Users/silvh/Library/CloudStorage/OneDrive-Personal/datajam/expense-c
 runtime = "python3.12"
 architecture = "x86_64"
 handler = "app.lambda_handler"
-manifest_hash = "007b0aa52ff14517db2a903dc3c58dcd"
+manifest_hash = "ecd1b1c53d5e27ced22183aa3aa5978d"
 packagetype = "Zip"
 functions = ["ParserFunction"]
 

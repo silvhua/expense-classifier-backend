@@ -1,20 +1,20 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  expense-classifier-be
+  expense-classifier-backend
 
-  Sample SAM Template for expense-classifier-be
+  Sample SAM Template for expense-classifier-backend
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 15
 
 Resources:
-  HelloWorldFunction:
+  ParserFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: app/
+      CodeUri: src/
       Handler: app.lambda_handler
       Runtime: python3.12
       Architectures:
@@ -23,7 +23,7 @@ Resources:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /hello
+            Path: /parse
             Method: get
       Layers:
         - arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python312:13 # from https://aws-sdk-pandas.readthedocs.io/en/3.9.1/layers.html
@@ -75,7 +75,7 @@ Resources:
         Statement:
           - Effect: Allow
             Principal:
-              Service: lambda.amazonaws.com
+              Service: apigateway.amazonaws.com
             Action: sts:AssumeRole
       Policies:
         - PolicyName: ApiPolicy

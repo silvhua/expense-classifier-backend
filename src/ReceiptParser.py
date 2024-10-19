@@ -114,9 +114,9 @@ class ReceiptParser:
         return parsed_entities
         
 if __name__ == "__main__":
-    PROJECT_ID = "cool-reality-383300"
+    PROJECT_ID = ""
     LOCATION = "us"  # Format is 'us' or 'eu'
-    PROCESSOR_ID = "fa18104348406151"  # Create processor in Cloud Console
+    PROCESSOR_ID = ""  # Create processor in Cloud Console
 
     # The local file in your current working directory
     file_name = "receipt_costco.jpg"

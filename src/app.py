@@ -1,6 +1,6 @@
 import json
 from pandas import DataFrame
-from openai import OpenAI
+# from openai import OpenAI
 
 
 def lambda_handler(event, context):

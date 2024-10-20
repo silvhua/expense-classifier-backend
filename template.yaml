@@ -8,15 +8,17 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 15
+    Timeout: 300
+    MemorySize: 3008
 
 Resources:
   ParserFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
+    # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: src/
-      Handler: app.lambda_handler
-      Runtime: python3.12
+      ImageUri: 741448954840.dkr.ecr.us-west-2.amazonaws.com/docker-lambda-documentai:latest
+      PackageType: Image
       Architectures:
         - x86_64
       Events:
@@ -27,20 +29,6 @@ Resources:
             Method: get
       Layers:
         - arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python312:13 # from https://aws-sdk-pandas.readthedocs.io/en/3.9.1/layers.html
-
-  OpenaiLayer:
-    Type: AWS::Serverless::LayerVersion
-    Properties:
-      LayerName: OpenaiLayer
-      Description: Openai dependencies.
-      ContentUri: s3://datajam-expense-parser/lambda-layers/openai_layer.zip
-
-  GoogleDocumentaiLayer:
-    Type: AWS::Serverless::LayerVersion
-    Properties:
-      LayerName: GoogleDocumentaiLayer
-      Description: Google Documentai dependencies.
-      ContentUri: s3://datajam-expense-parser/lambda-layers/google_documentai_layer.zip
 
   LambdaFunctionRole:
     Type: AWS::IAM::Role

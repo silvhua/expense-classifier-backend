@@ -8,16 +8,16 @@ deployment_branch = "main"
 oidc_provider = "github-actions"
 permissions_provider = "OpenID Connect (OIDC)"
 
-[dev.pipeline_bootstrap.parameters]
-pipeline_execution_role = "arn:aws:iam::741448954840:role/aws-sam-cli-managed-dev-pipel-PipelineExecutionRole-LOvrqWqhhcZc"
-cloudformation_execution_role = "arn:aws:iam::741448954840:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionRo-7F0CR76kDZsY"
-artifacts_bucket = "aws-sam-cli-managed-dev-pipeline-r-artifactsbucket-vqm9nvtagxnf"
-image_repository = ""
-region = "us-west-2"
-
 [prod.pipeline_bootstrap.parameters]
 pipeline_execution_role = "arn:aws:iam::741448954840:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-Y0twWm4PC7iR"
 cloudformation_execution_role = "arn:aws:iam::741448954840:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-kfH9Kksk6xbw"
 artifacts_bucket = "aws-sam-cli-managed-prod-pipeline--artifactsbucket-4r85skrfmtrb"
-image_repository = ""
+image_repository = "741448954840.dkr.ecr.us-west-2.amazonaws.com/docker-lambda-documentai"
+region = "us-west-2"
+
+[dev.pipeline_bootstrap.parameters]
+pipeline_execution_role = "arn:aws:iam::741448954840:role/aws-sam-cli-managed-dev-pipel-PipelineExecutionRole-LOvrqWqhhcZc"
+cloudformation_execution_role = "arn:aws:iam::741448954840:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionRo-7F0CR76kDZsY"
+artifacts_bucket = "aws-sam-cli-managed-dev-pipeline-r-artifactsbucket-vqm9nvtagxnf"
+image_repository = "741448954840.dkr.ecr.us-west-2.amazonaws.com/docker-lambda-documentai"
 region = "us-west-2"

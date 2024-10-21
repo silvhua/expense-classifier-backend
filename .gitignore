@@ -1,4 +1,6 @@
 private
+src/application_default_credentials.json
+
 # Created by https://www.gitignore.io/api/osx,linux,python,windows,pycharm,visualstudiocode
 
 ### Linux ###

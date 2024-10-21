@@ -33,6 +33,11 @@ def lambda_handler(event, context):
         else:
             payload = event.get('body')
         name = payload.get('name')
+
+        with open(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS_PATH')) as file:
+            credentials = json.load(file)
+        print(f'Credentials: {credentials}')
+    
         message = f'Hello there, {name}!'
         messages.append(message)
         local_invoke = event.get('direct_local_invoke', None)
@@ -40,34 +45,34 @@ def lambda_handler(event, context):
         logger = Custom_Logger(__name__, level=logging_level)
         logger.info(f'Payload: {payload}\nLocal invoke: {local_invoke}')
 
-        PROJECT_ID = "datajam-438419"
-        LOCATION = "us"  # Format is 'us' or 'eu'
-        PROCESSOR_ID = "e781102d22fb3b53"  # Create processor in Cloud Console
+        # PROJECT_ID = "datajam-438419"
+        # LOCATION = "us"  # Format is 'us' or 'eu'
+        # PROCESSOR_ID = "e781102d22fb3b53"  # Create processor in Cloud Console
 
-        # The local file in your current working directory
-        file_name = '2021-12-18 Klokov weightlifting seminar receipt.pdf'
-        file_path = ''
+        # # The local file in your current working directory
+        # file_name = '2021-12-18 Klokov weightlifting seminar receipt.pdf'
+        # file_path = ''
 
-        parser = ReceiptParser(
-            project_id=PROJECT_ID,
-            location=LOCATION,
-            processor_id=PROCESSOR_ID
-        ) 
+        # parser = ReceiptParser(
+        #     project_id=PROJECT_ID,
+        #     location=LOCATION,
+        #     processor_id=PROCESSOR_ID
+        # ) 
 
-        ### Parse a folder
-        # receipts = parser.parse_folder(
-        #     folder_path=file_path,
-        #     save_path='../data/pickles'
+        # ### Parse a folder
+        # # receipts = parser.parse_folder(
+        # #     folder_path=file_path,
+        # #     save_path='../data/pickles'
+        # # )
+
+        # ## Parse a single file
+        # receipt = parser.parse(
+        #     file_name=file_name,
+        #     file_path=file_path,
         # )
-
-        ## Parse a single file
-        receipt = parser.parse(
-            file_name=file_name,
-            file_path=file_path,
-        )
-        messages.append('Receipt parsed successfully.')
-        receipt_df = parser.process()
-        print(receipt_df)
+        # messages.append('Receipt parsed successfully.')
+        # receipt_df = parser.process()
+        # print(receipt_df)
         status_code = 200
     except Exception as error:
         exc_type, exc_obj, tb = sys.exc_info()

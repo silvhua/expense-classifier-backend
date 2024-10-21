@@ -12,15 +12,15 @@ on:
 env:
   SAM_TEMPLATE: template.yaml
   TESTING_STACK_NAME: datajam-dev
-  TESTING_PIPELINE_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-dev-pipel-PipelineExecutionRole-5N6QVXPivFx9
-  TESTING_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionRo-8M1tgDYNak3K
-  TESTING_ARTIFACTS_BUCKET: aws-sam-cli-managed-dev-pipeline-r-artifactsbucket-jgnfjrfipuzi
+  TESTING_PIPELINE_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-dev-pipel-PipelineExecutionRole-DTDndgFQG40N
+  TESTING_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionRo-6DXVH5iFbOoX
+  TESTING_ARTIFACTS_BUCKET: aws-sam-cli-managed-dev-pipeline-r-artifactsbucket-qnispfd7tk9w
   TESTING_IMAGE_REPOSITORY: 741448954840.dkr.ecr.us-west-2.amazonaws.com/docker-lambda-datajam
   TESTING_REGION: us-west-2
   PROD_STACK_NAME: datajam-prod
-  PROD_PIPELINE_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-sofFdqO5Yg6g
-  PROD_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-QCf74nJP8peY
-  PROD_ARTIFACTS_BUCKET: aws-sam-cli-managed-prod-pipeline--artifactsbucket-chrmnm5pwufa
+  PROD_PIPELINE_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-HD1r4hlHFI8h
+  PROD_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-PiXgVMpsfpry
+  PROD_ARTIFACTS_BUCKET: aws-sam-cli-managed-prod-pipeline--artifactsbucket-fwun9qczjrfh
   PROD_IMAGE_REPOSITORY: 741448954840.dkr.ecr.us-west-2.amazonaws.com/docker-lambda-datajam
   PROD_REGION: us-west-2
 

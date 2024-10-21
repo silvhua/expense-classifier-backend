@@ -15,7 +15,6 @@ RUN pip install -r requirements.txt --target ${LAMBDA_TASK_ROOT}
 
 # set environment variables
 # ENV GOOGLE_APPLICATION_CREDENTIALS=${LAMBDA_TASK_ROOT}/clientLibraryConfig-0000.json
-# ENV GOOGLE_APPLICATION_CREDENTIALS=${LAMBDA_TASK_ROOT}/application_default_credentials.json
 ENV GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS_PATH}
 
 # Copy function code

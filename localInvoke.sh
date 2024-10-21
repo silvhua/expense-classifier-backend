@@ -1,5 +1,5 @@
 # https://docs.aws.amazon.com/lambda/latest/dg/images-create.html
-# curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'
+# https://github.com/aws/aws-lambda-runtime-interface-emulator?tab=readme-ov-file#test-an-image-with-rie-included-in-the-image
 
 docker kill $(docker ps -aq)
 docker build -t local . 

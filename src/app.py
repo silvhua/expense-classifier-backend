@@ -38,8 +38,9 @@ def lambda_handler(event, context):
             credentials = json.load(file)
         print(f'Credentials: {credentials}')
     
-        message = f'Hello there, {name}!'
+        message = f'Hello, {name}!'
         messages.append(message)
+        messages.append(json.dumps(credentials))
         local_invoke = event.get('direct_local_invoke', None)
         logging_level = logging.DEBUG if local_invoke else logging.INFO
         logger = Custom_Logger(__name__, level=logging_level)

@@ -1,6 +1,7 @@
 import sys
 import json
-from pandas import DataFrame
+from Custom_Logger import *
+# from ReceiptParser import *
 # from openai import OpenAI
 
 
@@ -30,8 +31,13 @@ def lambda_handler(event, context):
         if type(event.get('body')) == str:
             payload = json.loads(event["body"])
         else:
-            payload = event["body"]
-        message = payload.get('message')
+            payload = event.get('body')
+        name = payload.get('name')
+        message = f'Hello there, {name}!'
+        local_invoke = event.get('direct_local_invoke', None)
+        logging_level = logging.DEBUG if local_invoke else logging.INFO
+        logger = Custom_Logger(__name__, level=logging_level)
+        logger.info(f'Payload: {payload}\nLocal invoke: {local_invoke}')
     except Exception as error:
         exc_type, exc_obj, tb = sys.exc_info()
         f = tb.tb_frame
@@ -43,8 +49,5 @@ def lambda_handler(event, context):
         print(message)
     return {
         "statusCode": 200,
-        "body": json.dumps({
-            "message": message,
-            # "location": ip.text.replace("\n", "")
-        }),
+        "body": json.dumps(message),
     }

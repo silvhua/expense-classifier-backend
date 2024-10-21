@@ -1,5 +1,9 @@
 {
-  "body": "{\"message\": \"hello, my friend\"}",
+  "body": {
+    "message": "Hello, World!",
+    "name": "Silvia"
+  },
+  "direct_local_invoke": 1,
   "resource": "/hello",
   "path": "/hello",
   "httpMethod": "GET",

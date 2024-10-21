@@ -183,7 +183,7 @@ jobs:
           ECR_REPOSITORY: docker-lambda-datajam
           IMAGE_TAG: latest
         run: |
-          docker build \
+          docker build --no-cache \
             --build-arg GOOGLE_APPLICATION_CREDENTIALS_PATH=clientLibraryConfig-0000.json \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG

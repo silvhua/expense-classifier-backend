@@ -60,20 +60,20 @@ def lambda_handler(event, context):
             processor_id=PROCESSOR_ID
         ) 
 
-        # ### Parse a folder
-        # # receipts = parser.parse_folder(
-        # #     folder_path=file_path,
-        # #     save_path='../data/pickles'
-        # # )
-
-        # ## Parse a single file
-        # receipt = parser.parse(
-        #     file_name=file_name,
-        #     file_path=file_path,
+        ### Parse a folder
+        # receipts = parser.parse_folder(
+        #     folder_path=file_path,
+        #     save_path='../data/pickles'
         # )
-        # messages.append('Receipt parsed successfully.')
-        # receipt_df = parser.process()
-        # print(receipt_df)
+
+        ## Parse a single file
+        receipt = parser.parse(
+            file_name=file_name,
+            file_path=file_path,
+        )
+        receipt_df = parser.process()
+        messages.append(f'Receipt parsed successfully. DataFrame Shape: {receipt.shape}')
+        print(receipt_df)
         status_code = 200
     except Exception as error:
         exc_type, exc_obj, tb = sys.exc_info()

@@ -46,19 +46,19 @@ def lambda_handler(event, context):
         logger = Custom_Logger(__name__, level=logging_level)
         logger.info(f'Payload: {payload}\nLocal invoke: {local_invoke}')
 
-        # PROJECT_ID = "datajam-438419"
-        # LOCATION = "us"  # Format is 'us' or 'eu'
-        # PROCESSOR_ID = "e781102d22fb3b53"  # Create processor in Cloud Console
+        PROJECT_ID = "datajam-438419"
+        LOCATION = "us"  # Format is 'us' or 'eu'
+        PROCESSOR_ID = "e781102d22fb3b53"  # Create processor in Cloud Console
 
-        # # The local file in your current working directory
-        # file_name = '2021-12-18 Klokov weightlifting seminar receipt.pdf'
-        # file_path = ''
+        # The local file in your current working directory
+        file_name = '2021-12-18 Klokov weightlifting seminar receipt.pdf'
+        file_path = ''
 
-        # parser = ReceiptParser(
-        #     project_id=PROJECT_ID,
-        #     location=LOCATION,
-        #     processor_id=PROCESSOR_ID
-        # ) 
+        parser = ReceiptParser(
+            project_id=PROJECT_ID,
+            location=LOCATION,
+            processor_id=PROCESSOR_ID
+        ) 
 
         # ### Parse a folder
         # # receipts = parser.parse_folder(

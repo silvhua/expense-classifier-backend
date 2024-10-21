@@ -17,7 +17,7 @@ Resources:
     # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Type: AWS::Serverless::Function 
     Properties:
-      ImageUri: 741448954840.dkr.ecr.us-west-2.amazonaws.com/docker-lambda-documentai:latest
+      ImageUri: 741448954840.dkr.ecr.us-west-2.amazonaws.com/docker-lambda-datajam:latest
       PackageType: Image
       Architectures:
         - x86_64

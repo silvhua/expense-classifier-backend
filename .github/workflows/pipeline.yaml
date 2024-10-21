@@ -93,69 +93,10 @@ jobs:
           name: packaged-prod.yaml
           path: packaged-prod.yaml
 
-  # deploy-testing:
-  #   if: github.ref == 'refs/heads/main'
-  #   needs: [build-and-package]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: aws-actions/setup-sam@v2
-  #       with:
-  #         use-installer: true
-  #     - uses: actions/download-artifact@v4
-  #       with:
-  #         name: packaged-testing.yaml
-
-  #     - name: Assume the testing pipeline user role
-  #       uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         aws-region: ${{ env.TESTING_REGION }}
-  #         role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
-  #         role-session-name: testing-deployment
-  #         role-duration-seconds: 3600
-  #         role-skip-session-tagging: true
-  #     - name: Login to AWS ECR
-  #       id: login-ecr
-  #       uses: aws-actions/amazon-ecr-login@v1
-  #     - name: Build, tag, and push image to Amazon
-  #       id: build-image
-  #       env:
-  #         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-  #         ECR_REPOSITORY: docker-lambda-documentai
-  #         IMAGE_TAG: latest
-  #       run: |
-  #         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-  #         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-  #         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
-  #     - name: Deploy to testing account
-  #       run: |
-  #         sam deploy --stack-name ${TESTING_STACK_NAME} \
-  #           --template packaged-testing.yaml \
-  #           --capabilities CAPABILITY_NAMED_IAM \
-  #           --region ${TESTING_REGION} \
-  #           --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
-  #           --image-repository ${TESTING_IMAGE_REPOSITORY} \
-  #           --no-fail-on-empty-changeset \
-  #           --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE}
-
-  # integration-test:
-  #   if: github.ref == 'refs/heads/main'
-  #   needs: [deploy-testing]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - run: |
-  #         # trigger the integration tests here
-
-  deploy-prod:
+  deploy-testing:
     if: github.ref == 'refs/heads/main'
-    # needs: [integration-test]
     needs: [build-and-package]
     runs-on: ubuntu-latest
-    # Configure GitHub Action Environment to have a manual approval step before deployment to production
-    # https://docs.github.com/en/actions/reference/environments
-    # environment: <configured-environment>
     steps:
       - uses: actions/checkout@v3
       - uses: aws-actions/setup-sam@v2
@@ -163,14 +104,14 @@ jobs:
           use-installer: true
       - uses: actions/download-artifact@v4
         with:
-          name: packaged-prod.yaml
+          name: packaged-testing.yaml
 
-      - name: Assume the prod pipeline user role
+      - name: Assume the testing pipeline user role
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ env.PROD_REGION }}
-          role-to-assume: ${{ env.PROD_PIPELINE_EXECUTION_ROLE }}
-          role-session-name: prod-deployment
+          aws-region: ${{ env.TESTING_REGION }}
+          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
+          role-session-name: testing-deployment
           role-duration-seconds: 3600
           role-skip-session-tagging: true
       - name: Login to AWS ECR
@@ -187,13 +128,72 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-      - name: Deploy to production account
+      - name: Deploy to testing account
         run: |
-          sam deploy --stack-name ${PROD_STACK_NAME} \
-            --template packaged-prod.yaml \
+          sam deploy --stack-name ${TESTING_STACK_NAME} \
+            --template packaged-testing.yaml \
             --capabilities CAPABILITY_NAMED_IAM \
-            --region ${PROD_REGION} \
-            --s3-bucket ${PROD_ARTIFACTS_BUCKET} \
-            --image-repository ${PROD_IMAGE_REPOSITORY} \
+            --region ${TESTING_REGION} \
+            --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
+            --image-repository ${TESTING_IMAGE_REPOSITORY} \
             --no-fail-on-empty-changeset \
-            --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE}
+            --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE}
+
+  # integration-test:
+  #   if: github.ref == 'refs/heads/main'
+  #   needs: [deploy-testing]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - run: |
+  #         # trigger the integration tests here
+
+  # deploy-prod:
+  #   if: github.ref == 'refs/heads/main'
+  #   needs: [integration-test]
+  #   # needs: [build-and-package]
+  #   runs-on: ubuntu-latest
+  #   # Configure GitHub Action Environment to have a manual approval step before deployment to production
+  #   # https://docs.github.com/en/actions/reference/environments
+  #   # environment: <configured-environment>
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: aws-actions/setup-sam@v2
+  #       with:
+  #         use-installer: true
+  #     - uses: actions/download-artifact@v4
+  #       with:
+  #         name: packaged-prod.yaml
+
+  #     - name: Assume the prod pipeline user role
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         aws-region: ${{ env.PROD_REGION }}
+  #         role-to-assume: ${{ env.PROD_PIPELINE_EXECUTION_ROLE }}
+  #         role-session-name: prod-deployment
+  #         role-duration-seconds: 3600
+  #         role-skip-session-tagging: true
+  #     - name: Login to AWS ECR
+  #       id: login-ecr
+  #       uses: aws-actions/amazon-ecr-login@v1
+  #     - name: Build, tag, and push image to Amazon
+  #       id: build-image
+  #       env:
+  #         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+  #         ECR_REPOSITORY: docker-lambda-documentai
+  #         IMAGE_TAG: latest
+  #       run: |
+  #         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+  #         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+  #         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+  #     - name: Deploy to production account
+  #       run: |
+  #         sam deploy --stack-name ${PROD_STACK_NAME} \
+  #           --template packaged-prod.yaml \
+  #           --capabilities CAPABILITY_NAMED_IAM \
+  #           --region ${PROD_REGION} \
+  #           --s3-bucket ${PROD_ARTIFACTS_BUCKET} \
+  #           --image-repository ${PROD_IMAGE_REPOSITORY} \
+  #           --no-fail-on-empty-changeset \
+  #           --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE}

@@ -2,6 +2,8 @@
 # Python 3.12 did not work
 FROM public.ecr.aws/lambda/python:3.10  
 
+ARG GOOGLE_APPLICATION_CREDENTIALS_PATH
+
 # Copy requirements.txt
 COPY ./src/requirements.txt ${LAMBDA_TASK_ROOT}
 
@@ -10,6 +12,11 @@ COPY ./src/requirements.txt ${LAMBDA_TASK_ROOT}
 RUN yum install gcc -y
 RUN python -m pip install --upgrade pip setuptools
 RUN pip install -r requirements.txt --target ${LAMBDA_TASK_ROOT}
+
+# set environment variables
+# ENV GOOGLE_APPLICATION_CREDENTIALS=${LAMBDA_TASK_ROOT}/clientLibraryConfig-0000.json
+# ENV GOOGLE_APPLICATION_CREDENTIALS=${LAMBDA_TASK_ROOT}/application_default_credentials.json
+ENV GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS_PATH}
 
 # Copy function code
 COPY ./src/* ${LAMBDA_TASK_ROOT}

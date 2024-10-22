@@ -2,7 +2,7 @@ import sys
 import json
 from Custom_Logger import *
 from ReceiptParser import *
-# from openai import OpenAI
+# from openai import OpenAIa
 
 
 def lambda_handler(event, context):
@@ -66,14 +66,16 @@ def lambda_handler(event, context):
         #     save_path='../data/pickles'
         # )
 
-        ## Parse a single file
-        receipt = parser.parse(
-            file_name=file_name,
-            file_path=file_path,
-        )
-        receipt_df = parser.process()
-        messages.append(f'Receipt parsed successfully. DataFrame Shape: {receipt.shape}')
-        print(receipt_df)
+        # ## Parse a single file
+        # receipt = parser.parse(
+        #     file_name=file_name,
+        #     file_path=file_path,
+        # )
+        # receipt_df = parser.process()
+        # messages.append(f'Receipt parsed successfully. DataFrame Shape: {receipt_df.shape}')
+        # print(receipt_df)
+        if local_invoke:
+            return parser
         status_code = 200
     except Exception as error:
         exc_type, exc_obj, tb = sys.exc_info()

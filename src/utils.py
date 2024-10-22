@@ -1,6 +1,7 @@
 import pandas as pd
 import pickle
 from datetime import datetime
+import json
 
 def savepickle(model,filename, ext='sav', path=None,append_version=False):
     """

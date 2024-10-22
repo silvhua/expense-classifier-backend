@@ -27,7 +27,6 @@ def lambda_handler(event, context):
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
     messages = []
-    messages.append(os.environ.get('AWS_ACCESS_KEY_ID', 'no aws access key id'))
     try:
         if type(event.get('body')) == str:
             payload = json.loads(event["body"])

@@ -15,7 +15,11 @@ class ReceiptParser:
         self.project_id = project_id
         self.location = location
         self.project_id = processor_id
-        opts = {"api_endpoint": f"{location}-documentai.googleapis.com"}
+        api_key_string = os.environ.get('GOOGLE_API_KEY')
+        opts = {
+            "api_endpoint": f"{location}-documentai.googleapis.com",
+            "api_key": api_key_string
+            }
 
         # Instantiates a client
         self.documentai_client = documentai.DocumentProcessorServiceClient(client_options=opts)
@@ -23,7 +27,11 @@ class ReceiptParser:
         # The full resource name of the processor, e.g.:
         # projects/project-id/locations/location/processor/processor-id
         # You must create new processors in the Cloud Console first
-        self.resource_name = self.documentai_client.processor_path(project_id, location, processor_id)
+
+        self.resource_name = self.documentai_client.processor_path(
+            project_id, location, processor_id,
+            # client_options={}
+            )
         self.documents = {}
         self.dataframes = {}
         self.mime_types = {

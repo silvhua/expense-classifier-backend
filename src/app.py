@@ -34,23 +34,24 @@ def lambda_handler(event, context):
             payload = event.get('body')
         name = payload.get('name')
 
-        with open(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')) as file:
-            credentials = json.load(file)
+        # with open(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')) as file:
+        #     credentials = json.load(file)
     
         message = f'Hello, {name}...'
         messages.append(message)
-        messages.append(json.dumps(credentials))
+        # messages.append(json.dumps(credentials))
         local_invoke = event.get('direct_local_invoke', None)
         if local_invoke:
             logging_level = logging.DEBUG
-            print(f'Credentials: {credentials}')
+            # print(f'Credentials: {credentials}')
             
         else:
             logging_level = logging.INFO
         logger = Custom_Logger(__name__, level=logging_level)
         logger.info(f'Payload: {payload}\nLocal invoke: {local_invoke}')
 
-        PROJECT_ID = "datajam-438419"
+        # PROJECT_ID = "datajam-438419"
+        PROJECT_ID = "362542744058"
         LOCATION = "us"  # Format is 'us' or 'eu'
         PROCESSOR_ID = "e781102d22fb3b53"  # Create processor in Cloud Console
 
@@ -62,7 +63,7 @@ def lambda_handler(event, context):
             file_name = payload.get('filename', None)
             use_s3 = True
         file_path = ''
-
+        print(f'file_name and path: {file_path}/{file_name}')
         if file_name == None:
             status_code = 500
             messages.append('No image file name provided.')

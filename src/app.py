@@ -55,9 +55,13 @@ def lambda_handler(event, context):
         LOCATION = "us"  # Format is 'us' or 'eu'
         PROCESSOR_ID = "e781102d22fb3b53"  # Create processor in Cloud Console
 
-        # The local file in your current working directory
-        # file_name = '2021-12-18 Klokov weightlifting seminar receipt.pdf'
-        file_name = payload.get('filename', None)
+        if payload.get('local_file', False) == True:
+            # The local file in your current working directory
+            file_name = '2021-12-18 Klokov weightlifting seminar receipt.pdf'
+            use_s3 = False
+        else:
+            file_name = payload.get('filename', None)
+            use_s3 = True
         file_path = ''
 
         if file_name == None:
@@ -78,7 +82,7 @@ def lambda_handler(event, context):
         receipt = parser.parse(
             file_name=file_name,
             file_path=file_path,
-            s3=True
+            s3=use_s3
         )
         receipt_df = parser.process()
         messages.append(f'Receipt parsed successfully. DataFrame Shape: {receipt_df.shape}')

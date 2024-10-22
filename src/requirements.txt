@@ -3,5 +3,7 @@ numexpr==2.8.4
 google-cloud-documentai==2.33.0
 google-cloud-documentai-toolbox==0.14.0-a0
 # openai
+### installations for local testing only
 ### ipykernel is useful if you want to use Jupyter notebook
 # conda install -y ipykernel
+# pip install boto3

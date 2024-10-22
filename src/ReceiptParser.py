@@ -2,7 +2,7 @@ import pandas as pd
 from google.cloud import documentai_v1 as documentai
 import os
 from typing import Optional
-from utils import savepickle
+from utils import savepickle, load_receipt
 
 class ReceiptParser:
 
@@ -69,16 +69,26 @@ class ReceiptParser:
             self,
             file_name: str,
             file_path: str='',
-            mime_type: str = "image/png",
+            s3: Optional[bool] = False,
             save_path: Optional[str] = None
         ) -> documentai.Document:
         """
         Processes a document using the Document AI Online Processing API.
+        Refer to https://cloud.google.com/document-ai/docs/processors-list for supported file types
+
+        Parameters:
+        - file_name (str): The name of the file to process.
+        - file_path (str): The path to the file to process.
+        - s3 (bool; optional): Whether or not the file is stored in an S3 bucket.
+        - save_path (str; optional): The path to save the processed document.
         """
         full_file_path = f'{file_path}/{file_name}' if file_path else file_name
         # Read the file into memory
-        with open(full_file_path, "rb") as file:
-            file_content = file.read()
+        if s3:
+            file_content = load_receipt(file_name)
+        else:
+            with open(full_file_path, "rb") as file:
+                file_content = file.read()
 
         # Load Binary Data into Document AI RawDocument Object
         split_file_name = os.path.splitext(full_file_path)
@@ -106,6 +116,7 @@ class ReceiptParser:
         else:
             first_key = next(iter(self.documents))
             document = self.documents.get(first_key)
+            document_key = first_key
         parsed_entities = []
         for entity in getattr(document, 'entities'):
             parsed_entities = self.parse_item(entity, parsed_entities, include_metadata)
@@ -177,7 +188,6 @@ if __name__ == "__main__":
     file_path = './data/receipts/2024-10-19'
     # Refer to https://cloud.google.com/document-ai/docs/processors-list
     # for supported file types
-    mime_type = "image/png"
 
     parser = ReceiptParser(
         project_id=PROJECT_ID,
@@ -197,4 +207,4 @@ if __name__ == "__main__":
         file_path=file_path,
     )
     receipt_df = parser.process()
-    (receipt_df)
+    print(receipt_df)

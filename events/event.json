@@ -1,7 +1,8 @@
 {
   "body": {
     "message": "Hello, World!",
-    "name": "Silvia"
+    "name": "Silvia",
+    "filename": "receipt_costco.jpg"
   },
   "direct_local_invoke": 1,
   "resource": "/hello",

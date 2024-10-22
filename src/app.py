@@ -27,6 +27,7 @@ def lambda_handler(event, context):
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
     messages = []
+    messages.append(os.environ.get('AWS_ACCESS_KEY_ID', 'no aws access key id'))
     try:
         if type(event.get('body')) == str:
             payload = json.loads(event["body"])
@@ -34,15 +35,19 @@ def lambda_handler(event, context):
             payload = event.get('body')
         name = payload.get('name')
 
-        with open(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS_PATH')) as file:
+        with open(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')) as file:
             credentials = json.load(file)
-        print(f'Credentials: {credentials}')
     
         message = f'Hello, {name}!'
         messages.append(message)
         messages.append(json.dumps(credentials))
         local_invoke = event.get('direct_local_invoke', None)
-        logging_level = logging.DEBUG if local_invoke else logging.INFO
+        if local_invoke:
+            logging_level = logging.DEBUG
+            print(f'Credentials: {credentials}')
+            
+        else:
+            logging_level = logging.INFO
         logger = Custom_Logger(__name__, level=logging_level)
         logger.info(f'Payload: {payload}\nLocal invoke: {local_invoke}')
 
@@ -51,8 +56,17 @@ def lambda_handler(event, context):
         PROCESSOR_ID = "e781102d22fb3b53"  # Create processor in Cloud Console
 
         # The local file in your current working directory
-        file_name = '2021-12-18 Klokov weightlifting seminar receipt.pdf'
+        # file_name = '2021-12-18 Klokov weightlifting seminar receipt.pdf'
+        file_name = payload.get('filename', None)
         file_path = ''
+
+        if file_name == None:
+            status_code = 500
+            messages.append('No image file name provided.')
+            return {
+                "statusCode": status_code,
+                "body": json.dumps("".join([f"{message}\n" for message in messages])),
+            }
 
         parser = ReceiptParser(
             project_id=PROJECT_ID,
@@ -60,21 +74,16 @@ def lambda_handler(event, context):
             processor_id=PROCESSOR_ID
         ) 
 
-        ### Parse a folder
-        # receipts = parser.parse_folder(
-        #     folder_path=file_path,
-        #     save_path='../data/pickles'
-        # )
-
-        # ## Parse a single file
-        # receipt = parser.parse(
-        #     file_name=file_name,
-        #     file_path=file_path,
-        # )
-        # receipt_df = parser.process()
-        # messages.append(f'Receipt parsed successfully. DataFrame Shape: {receipt_df.shape}')
-        # print(receipt_df)
-        if local_invoke:
+        ## Parse a single file
+        receipt = parser.parse(
+            file_name=file_name,
+            file_path=file_path,
+            s3=True
+        )
+        receipt_df = parser.process()
+        messages.append(f'Receipt parsed successfully. DataFrame Shape: {receipt_df.shape}')
+        print(receipt_df)
+        if local_invoke and os.environ.get('DOCKER_INVOKE', 0) == 0:
             return parser
         status_code = 200
     except Exception as error:

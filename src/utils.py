@@ -2,6 +2,7 @@ import pandas as pd
 import pickle
 from datetime import datetime
 import json
+import boto3
 
 def savepickle(model,filename, ext='sav', path=None,append_version=False):
     """
@@ -22,3 +23,10 @@ def savepickle(model,filename, ext='sav', path=None,append_version=False):
         pickle.dump(model, fh)
     print('File saved: ',full_path)
     print('\tTime completed:', datetime.now())
+
+def load_receipt(filename):
+    s3 = boto3.client('s3')
+    s3_response = s3.get_object(Bucket='datajam-expense-parser', Key=f'receipts/{filename}')
+    file_content = s3_response['Body'].read()
+    return file_content
+    

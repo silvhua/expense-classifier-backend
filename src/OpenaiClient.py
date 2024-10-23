@@ -17,7 +17,8 @@ class OpenaiClient:
 
     def generate_completion(
         self, user_input=None, image_url=None, n_choices=1,
-        max_tokens=300, temperature=0.0, model="gpt-4o-mini"
+        max_tokens=300, temperature=0.0, model="gpt-4o-mini",
+        response_format=None
     ):
         """
         A method that generates completions using a OpenAI model.
@@ -32,6 +33,7 @@ class OpenaiClient:
             max_tokens (int, optional): The maximum number of tokens in the completion. Defaults to 300.
             temperature (float, optional): The temperature for sampling completions. Defaults to 0.0.
             model (str, optional): The language model to use. Defaults to "gpt-4-vision-preview".
+            response_format (dict or custom class, optional): An object specifying the structure of the JSON response. 
         Returns:
             dict: A dictionary containing the history of completions and responses.
 
@@ -73,6 +75,7 @@ class OpenaiClient:
             response = self.client.chat.completions.create(
                 model=model,
                 messages=messages,
+                response_format=response_format,
                 max_tokens=max_tokens,
                 temperature=temperature,
                 n=n_choices,

@@ -80,6 +80,28 @@ Resources:
                   - logs:PutLogEvents
                 Resource: '*'
 
+  ApiGatewayLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/apigateway/${AWS::StackName}-logs"
+      RetentionInDays: 14
+
+  ApiGatewayStage:
+    Type: AWS::ApiGateway::Stage
+    Properties: 
+      StageName: Prod
+      Description: "Prod stage"
+      RestApiId: !Ref ServerlessRestApi
+      DeploymentId: !Ref ServerlessRestApiDeployment
+      MethodSettings:
+        - LoggingLevel: INFO
+          DataTraceEnabled: true
+          MetricsEnabled: true
+          ResourcePath: "/*"
+          HttpMethod: "*"
+      AccessLogSetting:
+        DestinationArn: !GetAtt ApiGatewayLogGroup.Arn
+        Format: '{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","caller":"$context.identity.caller","user":"$context.identity.user","requestTime":"$context.requestTime","httpMethod":"$context.httpMethod","resourcePath":"$context.resourcePath","status":"$context.status","protocol":"$context.protocol","responseLength":"$context.responseLength"}'
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

@@ -79,6 +79,18 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: '*'
+      AccessLogSettings: # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-stage-accesslogsetting.html
+        # DestinationArn: arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs # https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html#set-up-access-logging-permissions
+        DestinationArn: !GetAtt ApiLogGroup.Arn
+        # DestinationArn: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/api-gateway/${WebhooksApi}/access-log"
+        Format: '{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","requestTime":"$context.requestTime","httpMethod":"$context.httpMethod","routeKey":"$context.routeKey","status":"$context.status","protocol":"$context.protocol","responseLength":"$context.responseLength"}'
+  ApiLogGroup:
+    Type: AWS::Logs::LogGroup # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html
+    Properties:
+      LogGroupName: !Join
+        - '-'
+        - - !Ref WebhooksHttpApi
+          - access-logs
 
 
 Outputs:

@@ -26,7 +26,7 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /parse
-            Method: get
+            Method: post
       Environment:
         Variables:
           GOOGLE_APPLICATION_CREDENTIALS_PATH: clientLibraryConfig-0000.json

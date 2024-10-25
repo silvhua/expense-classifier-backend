@@ -86,6 +86,12 @@ Resources:
       LogGroupName: !Sub "/aws/apigateway/${AWS::StackName}-logs"
       RetentionInDays: 14
 
+  ServerlessRestApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId: !Ref ServerlessRestApi
+      StageName: dummy  # This is required but will be overridden by the stage resource
+
   ApiGatewayStage:
     Type: AWS::ApiGateway::Stage
     Properties: 

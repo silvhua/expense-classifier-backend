@@ -89,6 +89,7 @@ def lambda_handler(event, context):
             return parser
         status_code = 200
         body = receipt_json
+        logger.info("".join([f"{message}\n" for message in messages]))
     except Exception as error:
         exc_type, exc_obj, tb = sys.exc_info()
         f = tb.tb_frame

@@ -16,10 +16,10 @@ class ReceiptParser:
         self.location = location
         self.project_id = processor_id
         self.entities_to_parse = ['line_item', 'total_amount', 'supplier_name', 'supplier_address', 'receipt_date', 'supplier_city']
-        api_key_string = os.environ.get('GOOGLE_API_KEY')
+        # api_key_string = os.environ.get('GOOGLE_API_KEY')
         opts = {
             "api_endpoint": f"{location}-documentai.googleapis.com",
-            "api_key": api_key_string
+            # "api_key": api_key_string
             }
 
         # Instantiates a client

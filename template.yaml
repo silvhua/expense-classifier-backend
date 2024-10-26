@@ -51,12 +51,12 @@ Resources:
       #       Method: post
       Role: !GetAtt LambdaFunctionRole.Arn
 
-  OpenaiLayer:
-    Type: AWS::Serverless::LayerVersion
-    Properties:
-      LayerName: OpenaiLayer
-      Description: Openai dependencies.
-      ContentUri: s3://datajam-expense-parser/lambda-layers/openai_layer.zip
+  # OpenaiLayer:
+  #   Type: AWS::Serverless::LayerVersion
+  #   Properties:
+  #     LayerName: OpenaiLayer
+  #     Description: Openai dependencies.
+  #     ContentUri: s3://datajam-expense-parser/lambda-layers/openai_layer.zip
 
   LambdaFunctionRole:
     Type: AWS::IAM::Role

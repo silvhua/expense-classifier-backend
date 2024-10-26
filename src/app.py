@@ -37,7 +37,7 @@ def lambda_handler(event, context):
         # with open(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')) as file:
         #     credentials = json.load(file)
     
-        message = f'Hello, {name}...'
+        message = f'Hello, {name}...Last update: 2024-10-26 13:37'
         messages.append(message)
         # messages.append(json.dumps(credentials))
         local_invoke = event.get('direct_local_invoke', None)

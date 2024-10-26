@@ -56,12 +56,13 @@ def lambda_handler(event, context):
 
         if payload.get('local_file', False) == True:
             # The local file in your current working directory
-            file_name = '2021-12-18 Klokov weightlifting seminar receipt.pdf'
+            file_path = ''
+            file_name = 'receipt_browns.jpg'
             use_s3 = False
         else:
             file_name = payload.get('filename', None)
             use_s3 = True
-        file_path = ''
+            file_path = ''
         print(f'file_name and path: {file_path}/{file_name}')
         if file_name == None:
             status_code = 500

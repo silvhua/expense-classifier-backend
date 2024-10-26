@@ -3,6 +3,7 @@ from google.cloud import documentai_v1 as documentai
 import os
 from typing import Optional
 from utils import savepickle, load_receipt
+import json
 
 class ReceiptParser:
 
@@ -165,8 +166,17 @@ class ReceiptParser:
             if len(value_fields) > 0:
                 value_dict = {}
                 for field in value_fields:
-                    field_name = field[0].name
-                    value_dict[field_name] = field[1]
+                    field_name = field[0].name # field name
+                    field_value = field[1] #value
+                    #  Ensure it is JSON serializable  because some values will be of type `RepeatedScalarContainer` which is not JSON serializable
+                    try: 
+                        json.dumps(field_value)
+                        value_dict[field_name] = field_value
+                    except:
+                        try:
+                            value_dict[field_name] = field_value[0]
+                        except:
+                            value_dict[field_name] = ''
                 entity_dict = {**entity_dict, **value_dict}
         if entity.normalized_value:
             value = getattr(entity.normalized_value, 'text')

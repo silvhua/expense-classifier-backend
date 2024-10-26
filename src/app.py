@@ -44,7 +44,6 @@ def lambda_handler(event, context):
         if local_invoke:
             logging_level = logging.DEBUG
             # print(f'Credentials: {credentials}')
-            
         else:
             logging_level = logging.INFO
         logger = Custom_Logger(__name__, level=logging_level)
@@ -84,12 +83,12 @@ def lambda_handler(event, context):
             file_path=file_path,
             s3=use_s3
         )
-        receipt_df = parser.process()
-        messages.append(f'Receipt parsed successfully. DataFrame Shape: {receipt_df.shape}')
-        print(receipt_df)
+        receipt_json = parser.process()
+        messages.append(f'Receipt parsed successfully.')
         if local_invoke and os.environ.get('DOCKER_INVOKE', 0) == 0:
             return parser
         status_code = 200
+        body = receipt_json
     except Exception as error:
         exc_type, exc_obj, tb = sys.exc_info()
         f = tb.tb_frame
@@ -101,7 +100,9 @@ def lambda_handler(event, context):
         print(f'\nOriginal payload: {event.get("payload")}\n')
         print(message)
         status_code = 500
+        body = json.dumps("".join([f"{message}\n" for message in messages]))
+    logger.info(body)
     return {
         "statusCode": status_code,
-        "body": json.dumps("".join([f"{message}\n" for message in messages])),
+        "body": body,
     }

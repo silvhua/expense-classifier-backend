@@ -41,7 +41,7 @@ Resources:
       Architectures:
         - x86_64
       Layers:
-        - arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python312:13
+        # - arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python312:13
         - !Ref OpenaiLayer
       # Events:
       #   ClassifyRequest:

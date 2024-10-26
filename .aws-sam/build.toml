@@ -7,6 +7,6 @@ architecture = "x86_64"
 handler = "classifier_function.lambda_handler"
 manifest_hash = "17817a714928cf3464b5ee3d35fc8ff4"
 packagetype = "Zip"
-functions = ["ClassifierFunction"]
+functions = ["ClassifyFunction"]
 
 [layer_build_definitions]

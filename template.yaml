@@ -32,7 +32,7 @@ Resources:
           GOOGLE_APPLICATION_CREDENTIALS_PATH: clientLibraryConfig-0000.json
       Role: !GetAtt LambdaFunctionRole.Arn
 
-  ClassifierFunction:
+  ClassifyFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: classifier_function.lambda_handler

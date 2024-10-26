@@ -32,6 +32,32 @@ Resources:
           GOOGLE_APPLICATION_CREDENTIALS_PATH: clientLibraryConfig-0000.json
       Role: !GetAtt LambdaFunctionRole.Arn
 
+ClassifierFunction:
+  Type: AWS::Serverless::Function
+  Properties:
+    Handler: classifier_function.lambda_handler
+    Runtime: python3.10
+    CodeUri: src
+    Architectures:
+      - x86_64
+    Layers:
+      - arn:aws:lambda:us-west-2:336392948345:layer:AWSSDKPandas-Python312:13
+      - !Ref OpenaiLayer
+    # Events:
+    #   ClassifyRequest:
+    #     Type: Api
+    #     Properties:
+    #       Path: /classify
+    #       Method: post
+    Role: !GetAtt LambdaFunctionRole.Arn
+
+  OpenaiLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: OpenaiLayer
+      Description: Openai dependencies.
+      ContentUri: s3://datajam-expense-parser/lambda-layers/openai_layer.zip
+
   LambdaFunctionRole:
     Type: AWS::IAM::Role
     Properties:

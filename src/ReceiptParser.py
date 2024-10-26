@@ -15,6 +15,7 @@ class ReceiptParser:
         self.project_id = project_id
         self.location = location
         self.project_id = processor_id
+        self.entities_to_parse = ['line_item', 'total_amount', 'supplier_name', 'supplier_address', 'receipt_date', 'supplier_city']
         api_key_string = os.environ.get('GOOGLE_API_KEY')
         opts = {
             "api_endpoint": f"{location}-documentai.googleapis.com",
@@ -125,31 +126,35 @@ class ReceiptParser:
             first_key = next(iter(self.documents))
             document = self.documents.get(first_key)
             document_key = first_key
-        parsed_entities = []
+        parsed_entities = {}
+        parsed_entities['line_items'] = []
         for entity in getattr(document, 'entities'):
-            parsed_entities = self.parse_item(entity, parsed_entities, include_metadata)
-            if entity.type_ == 'line_item':
-                parsed_properties = {}
-                for property in entity.properties:
-                    parsed_properties = self.parse_item(property, parsed_properties)
-                current_entity = parsed_entities[-1]
-                parsed_properties.pop('id')
-                parsed_properties.pop('type')
-                parsed_properties.pop('mention_text')
-                current_entity['type'] = 'line_item'
-                for property, value in parsed_properties.items():
-                    current_entity[property] = value
-        df = pd.DataFrame(parsed_entities)
-        self.dataframes[document_key] = df
-        return df
+            entity_type = entity.type_
+            if entity_type in self.entities_to_parse:
+                parsed_entity = self.parse_item(entity, include_metadata)
+                if entity.type_ == 'line_item':
+                    parsed_properties = {}
+                    for property in entity.properties:
+                        parsed_properties = self.parse_item(property, parsed_properties)
+                    current_entity = parsed_entity
+                    parsed_properties.pop('id')
+                    
+                    current_entity['type'] = entity_type
+                    for property, value in parsed_properties.items():
+                        current_entity[property] = value
+                    parsed_entities['line_items'].append(current_entity)
+                else:
+                    parsed_entities[entity_type] = parsed_entity
+        return parsed_entities
     
-    def parse_item(self, entity, parsed_entities, include_metadata=False):
+    def parse_item(self, entity, include_metadata=False):
         id = entity.id
         description = entity.type_
         text = entity.mention_text
         value = text
         entity_dict = {
             'id': id,
+            'mention_text': text,
             'type': description,
             'mention_text': text
         }
@@ -178,13 +183,7 @@ class ReceiptParser:
 
             entity_dict['confidence'] = confidence
             entity_dict['pages'] = pages
-        if type(parsed_entities) == list:
-            parsed_entities.append(entity_dict)
-        else:
-            parsed_entities = {**parsed_entities, **entity_dict}
-            parsed_entities[description] = value
-
-        return parsed_entities
+        return entity_dict
         
 if __name__ == "__main__":
     PROJECT_ID = "datajam-438419"

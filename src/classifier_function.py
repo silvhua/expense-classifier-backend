@@ -73,6 +73,7 @@ def lambda_handler(event, context):
         print(response)
         messages.append(f"{json.dumps(result)}")
         print(messages)
+        body = result
 
     except Exception as error:
         exc_type, exc_obj, tb = sys.exc_info()
@@ -81,6 +82,7 @@ def lambda_handler(event, context):
         filename = f.f_code.co_filename
         message = f'[ERROR] An error occurred on line {lineno} in {filename}: {error}.'
         messages.append(message)
+        body = json.dumps(message)
         
         print(f'\nOriginal payload: {event.get("payload")}\n')
         print(message)
@@ -88,7 +90,7 @@ def lambda_handler(event, context):
 
     return {
         "statusCode": status_code,
-        "body": json.dumps({"messages": messages}, indent=4)
+        "body": body
     }
 
 def get_value(field, default="N/A"):

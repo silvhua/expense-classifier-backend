@@ -13,7 +13,7 @@ Our application solves this problem by automating the process of extracting data
 The system architecture consists of:
 
 - **React Frontend**: Users upload receipt images through the React UI and download the resulting CSV file after processing.
-- **API Gateway**: Acts as the entry point, forwarding requests from the React frontend to AWS Lambda.
+- **AWS SQS**: For storing the uploaded receipts.
 - **AWS Lambda (Parser and Classifier Functions)**: 
   - The first Lambda function sends the uploaded receipt to Google Document AI for parsing.
   - The second Lambda function sends the parsed data to OpenAI for classification and returns the categorized data.

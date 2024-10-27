@@ -32,24 +32,17 @@ def lambda_handler(event, context):
             payload = json.loads(event["body"])
         else:
             payload = event.get('body')
-        name = payload.get('name')
-
-        # with open(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')) as file:
-        #     credentials = json.load(file)
     
-        message = f'Hello, {name}...Last update: 2024-10-26 13:37'
+        message = f'Last update: 2024-10-26 13:37'
         messages.append(message)
-        # messages.append(json.dumps(credentials))
         local_invoke = event.get('direct_local_invoke', None)
         if local_invoke:
             logging_level = logging.DEBUG
-            # print(f'Credentials: {credentials}')
         else:
             logging_level = logging.INFO
         logger = Custom_Logger(__name__, level=logging_level)
         logger.info(f'Payload: {payload}\nLocal invoke: {local_invoke}')
 
-        # PROJECT_ID = "datajam-438419"
         PROJECT_ID = "362542744058"
         LOCATION = "us"  # Format is 'us' or 'eu'
         PROCESSOR_ID = "e781102d22fb3b53"  # Create processor in Cloud Console

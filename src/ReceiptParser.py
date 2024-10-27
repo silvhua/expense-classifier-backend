@@ -11,17 +11,18 @@ class ReceiptParser:
             self,
             project_id: str,
             location: str,
-            processor_id: str
+            processor_id: str,
+            local_invoke: bool = False
         ):
         self.project_id = project_id
         self.location = location
         self.project_id = processor_id
         self.entities_to_parse = ['line_item', 'total_amount', 'supplier_name', 'supplier_address', 'receipt_date', 'supplier_city']
-        # api_key_string = os.environ.get('GOOGLE_API_KEY')
-        opts = {
-            "api_endpoint": f"{location}-documentai.googleapis.com",
-            # "api_key": api_key_string
-            }
+        opts = {"api_endpoint": f"{location}-documentai.googleapis.com"}
+        if local_invoke == True:
+          api_key_string = os.environ.get('GOOGLE_API_KEY')
+          opts['api_key'] = api_key_string
+            
 
         # Instantiates a client
         self.documentai_client = documentai.DocumentProcessorServiceClient(client_options=opts)

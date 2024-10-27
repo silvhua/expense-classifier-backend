@@ -19,6 +19,10 @@ The system architecture consists of:
   - The second Lambda function sends the parsed data to OpenAI for classification and returns the categorized data.
 - **Google Document AI**: A pre-built expense parser model that extracts structured data (vendor name, total amount, date, line items) from receipts.
 -------------------------------------------------------------------------------------------------------------------------------------
+#### Data Split
+- ***Train Dataset***: Total 234 receipt
+- ***Test Dataset***： Total 46 receipt
+  
 #### Evaluation Metrics
 - ***F1 Score***: 0.813: This score indicates a strong balance between precision and recall for the labeling task. An F1 score above 0.8 is generally considered good, suggesting that the model effectively identifies labels while maintaining accuracy.
 

@@ -7,8 +7,6 @@ import openai
 
 # Load environment variables from .env file
 load_dotenv()
-openai.api_key = "sk-svcacct-kZ9qEr5giEFAMJERoO8sErMgjIagL8Xm1bsettbHRI3rUh8v2PxPYT2xDL0PVrbjalIT3BlbkFJBhmhobLbS9oltClDFAxnaHpmrxcUMK_kI_2JJEMW8oypOObSz9KB3BjjjdCxTf3h6qgA"
-openai.organization = "org-PpIzKg3IAEo6MJkkbHxIVaFz"
 
 def lambda_handler(event, context):
     """
@@ -18,13 +16,13 @@ def lambda_handler(event, context):
     try:
         
         status_code = 200
-        # api_key = os.environ.get('OPENAI_API_KEY')
-        # organization_id = os.environ.get('OPENAI_ORGANIZATION')
+        api_key = os.environ.get('OPENAI_API_KEY')
+        organization_id = os.environ.get('OPENAI_ORGANIZATION')
 
-        # openai.api_key = api_key
-        # openai.organization = organization_id
+        openai.api_key = api_key
+        openai.organization = organization_id
 
-        # messages.append(f"API Key: {api_key is not None}, Organization ID: {organization_id is not None}")
+        messages.append(f"API Key: {api_key is not None}, Organization ID: {organization_id is not None}")
 
         categories = ["advertising", "allowance on eligible capital property", "bad debts", "business start-up costs", "business tax, fees, licenses and dues",
                       "business-use-of-home expenses", "capital cost allowance", "delivery, freight and express", "fuel costs", "insurance", "interest and bank charges",

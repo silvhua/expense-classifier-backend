@@ -10,18 +10,19 @@ if __name__ == "__main__":
         event = json.load(file)
         
     output = lambda_handler(event, None)
+    print(output)
     
-    # Extract status code
-    print("Status Code:", output["statusCode"])
+    # # Extract status code
+    # print("Status Code:", output["statusCode"])
 
-    # Extract and clean up the message
-    messages = output.get("body", [])
-    print("Messages:")
+    # # Extract and clean up the message
+    # messages = output.get("body", [])
+    # print("Messages:")
 
-    for message in messages:
-        # Remove markdown formatting
-        cleaned_message = message.replace("```json\n", "").replace("\n```", "")
+    # for message in messages:
+    #     # Remove markdown formatting
+    #     cleaned_message = message.replace("```json\n", "").replace("\n```", "")
         
-        # Convert cleaned message to JSON and pretty print
-        message_dict = json.loads(cleaned_message)
-        print(json.dumps(message_dict, indent=4))
+    #     # Convert cleaned message to JSON and pretty print
+    #     message_dict = json.loads(cleaned_message)
+    #     print(json.dumps(message_dict, indent=4))

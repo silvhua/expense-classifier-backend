@@ -33,13 +33,15 @@ def lambda_handler(event, context):
                       "supplies", "telephone and utilities", "travel"]
 
         # Extract line items from parsed receipt
-        item = event.get("supplier_name")
+        item = event.get("supplier_name", {}).get("mention_text")
+        if not item:
+            raise ValueError("The 'supplier_name' field is mandatory and cannot be None.")
 
         # Extract additional information
-        total_amount = event.get("total_amount", {}).get("normalized_value")
-        supplier_address = event.get("supplier_address", {}).get("normalized_value", "N/A")
-        receipt_date = event.get("receipt_date", {}).get("normalized_value", "N/A")
-        supplier_city = event.get("supplier_city", {}).get("normalized_value", "N/A")
+        total_amount = get_value(event.get("total_amount", {}))
+        supplier_address = get_value(event.get("supplier_address", {}))
+        receipt_date = get_value(event.get("receipt_date", {}))
+        # supplier_city = get_value(event.get("supplier_city", {}))
 
         # Format the prompt for classification
         prompt_template = f"""
@@ -52,8 +54,7 @@ def lambda_handler(event, context):
             "category": "selected category",
             "total_amount": "{total_amount}",
             "supplier_address": "{supplier_address}",
-            "receipt_date": "{receipt_date}",
-            "supplier_city": "{supplier_city}"
+            "receipt_date": "{receipt_date}"
         }}.
 
         Example:
@@ -78,23 +79,6 @@ def lambda_handler(event, context):
         # Extract and handle the structured output
         structured_output = response.choices[0].message['content']
 
-        # Debugging: print the raw output
-        # print("Structured Output:", structured_output)
-
-        # # Attempt to parse the structured output as JSON
-        # classification_result = json.loads(structured_output)
-
-        # # Create final output JSON
-        # final_output = {
-        #     "supplier_name": item,
-        #     "category": classification_result.get("category"),
-        #     "total_amount": event.get("total_amount", {}).get("normalized_value", "N/A"),
-        #     "supplier_address": event.get("supplier_address", {}).get("normalized_value", "N/A"),
-        #     "receipt_date": event.get("receipt_date", {}).get("normalized_value", "N/A"),
-        #     "supplier_city": event.get("supplier_city", {}).get("normalized_value", "N/A")
-        # }
-        # messages.append(json.dumps(final_output, indent=4))
-
         messages.append(f"{structured_output}")
 
     except Exception as error:
@@ -113,3 +97,7 @@ def lambda_handler(event, context):
         "statusCode": status_code,
         "body": messages
     }
+
+# Helper function to validate fields
+def get_value(field, default="N/A"):
+    return field.get("mention_text") or field.get("normalized_value") or default

@@ -32,37 +32,30 @@ def lambda_handler(event, context):
             payload = json.loads(event["body"])
         else:
             payload = event.get('body')
-        name = payload.get('name')
-
-        # with open(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')) as file:
-        #     credentials = json.load(file)
     
-        message = f'Hello, {name}...'
+        message = f'Last update: 2024-10-26 13:37'
         messages.append(message)
-        # messages.append(json.dumps(credentials))
         local_invoke = event.get('direct_local_invoke', None)
         if local_invoke:
             logging_level = logging.DEBUG
-            # print(f'Credentials: {credentials}')
-            
         else:
             logging_level = logging.INFO
         logger = Custom_Logger(__name__, level=logging_level)
         logger.info(f'Payload: {payload}\nLocal invoke: {local_invoke}')
 
-        # PROJECT_ID = "datajam-438419"
         PROJECT_ID = "362542744058"
         LOCATION = "us"  # Format is 'us' or 'eu'
         PROCESSOR_ID = "e781102d22fb3b53"  # Create processor in Cloud Console
 
         if payload.get('local_file', False) == True:
             # The local file in your current working directory
-            file_name = '2021-12-18 Klokov weightlifting seminar receipt.pdf'
+            file_path = ''
+            file_name = 'receipt_browns.jpg'
             use_s3 = False
         else:
             file_name = payload.get('filename', None)
             use_s3 = True
-        file_path = ''
+            file_path = ''
         print(f'file_name and path: {file_path}/{file_name}')
         if file_name == None:
             status_code = 500
@@ -84,12 +77,13 @@ def lambda_handler(event, context):
             file_path=file_path,
             s3=use_s3
         )
-        receipt_df = parser.process()
-        messages.append(f'Receipt parsed successfully. DataFrame Shape: {receipt_df.shape}')
-        print(receipt_df)
+        receipt_json = parser.process()
+        messages.append(f'Receipt parsed successfully.')
         if local_invoke and os.environ.get('DOCKER_INVOKE', 0) == 0:
             return parser
         status_code = 200
+        body = receipt_json
+        logger.info("".join([f"{message}\n" for message in messages]))
     except Exception as error:
         exc_type, exc_obj, tb = sys.exc_info()
         f = tb.tb_frame
@@ -101,7 +95,9 @@ def lambda_handler(event, context):
         print(f'\nOriginal payload: {event.get("payload")}\n')
         print(message)
         status_code = 500
+        body = json.dumps("".join([f"{message}\n" for message in messages]))
+    logger.info(body)
     return {
         "statusCode": status_code,
-        "body": json.dumps("".join([f"{message}\n" for message in messages])),
+        "body": body,
     }

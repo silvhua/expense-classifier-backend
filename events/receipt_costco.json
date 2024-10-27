@@ -1,0 +1,37 @@
+{
+    "line_items": "item 1, item 2, ...",
+    "total_amount": {
+        "id": "2",
+        "mention_text": "454.36",
+        "type": "total_amount",
+        "units": 454,
+        "nanos": 360000000,
+        "normalized_value": "454.36"
+    },
+    "supplier_name": {
+        "id": "4",
+        "mention_text": "COSTCO\nWHOLESALE",
+        "type": "supplier_name"
+    },
+    "supplier_address": {
+        "id": "5",
+        "mention_text": "",
+        "type": "supplier_address",
+        "normalized_value": "605 Expo Blvd\nVancouver, BC V6B 1V4\nCanada"
+    },
+    "receipt_date": {
+        "id": "6",
+        "mention_text": "2024/08/27 16:25:57\n",
+        "type": "receipt_date",
+        "year": 2024,
+        "month": 8,
+        "day": 27,
+        "normalized_value": "2024-08-27"
+    },
+    "supplier_city": {
+        "id": "23",
+        "mention_text": "",
+        "type": "supplier_city",
+        "normalized_value": "Vancouver"
+    }
+}

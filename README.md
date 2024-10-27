@@ -20,15 +20,13 @@ The system architecture consists of:
 - **Google Document AI**: A pre-built expense parser model that extracts structured data (vendor name, total amount, date, line items) from receipts.
 -------------------------------------------------------------------------------------------------------------------------------------
 #### Fine Tuning Method
-##### Supported tuning methods ######
-Vertex AI offers supervised fine-tuning to tailor foundational models to specific needs.
+- ##### Supported tuning methods ###### : Vertex AI offers supervised fine-tuning to tailor foundational models to specific needs.
 
-##### Supervised fine-tuning #####
-Supervised fine-tuning enhances model performance by teaching it new capabilities. It utilizes a dataset comprising hundreds of labeled examples to guide the model in replicating a desired behavior or task. Each labeled instance illustrates the expected output during inference.
+- ##### Supervised fine-tuning ##### : Supervised fine-tuning enhances model performance by teaching it new capabilities. It utilizes a dataset comprising hundreds of labeled examples to guide the model in replicating a desired behavior or task. Each labeled instance illustrates the expected output during inference.
 
-When you initiate a supervised fine-tuning job, the model learns additional parameters that help it capture the necessary information to execute the intended task or adopt the desired behavior. These parameters are applied during inference, resulting in a new model that integrates the newly acquired knowledge with the original model.
+- When you initiate a supervised fine-tuning job, the model learns additional parameters that help it capture the necessary information to execute the intended task or adopt the desired behavior. These parameters are applied during inference, resulting in a new model that integrates the newly acquired knowledge with the original model.
 
-Supervised fine-tuning is particularly effective for text models when the desired output is straightforward and easy to define. It is ideal for tasks such as classification, sentiment analysis, entity extraction, summarizing uncomplicated content, and formulating domain-specific queries. For code models, supervised fine-tuning is the only available approach.
+- Supervised fine-tuning is particularly effective for text models when the desired output is straightforward and easy to define. It is ideal for tasks such as classification, sentiment analysis, entity extraction, summarizing uncomplicated content, and formulating domain-specific queries. For code models, supervised fine-tuning is the only available approach.
 
 #### Data Split
 - ***Train Dataset***: Total 234 receipt

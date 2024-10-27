@@ -18,6 +18,7 @@ The system architecture consists of:
   - The first Lambda function sends the uploaded receipt to Google Document AI for parsing.
   - The second Lambda function sends the parsed data to OpenAI for classification and returns the categorized data.
 - **Google Document AI**: A pre-built expense parser model that extracts structured data (vendor name, total amount, date, line items) from receipts.
+-------------------------------------------------------------------------------------------------------------------------------------
 #### Evaluation Metrics
 - ***F1 Score***: 0.813: This score indicates a strong balance between precision and recall for the labeling task. An F1 score above 0.8 is generally considered good, suggesting that the model effectively identifies labels while maintaining accuracy.
 
@@ -34,6 +35,7 @@ The system architecture consists of:
 
 - ***Failed Documents***: 0 failed documents indicates a smooth evaluation process without any errors.
 
+-------------------------------------------------------------------------------------------------------------------------------------
 - **OpenAI GPT**: gpt-4o-mini - Used for classifying the parsed text data into specific business expense categories (like "Travel," "Meals," or "Office Supplies").
 - **CSV Generation**: After classification, the backend generates a CSV file that is sent back to the frontend for the user to download.
 

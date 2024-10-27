@@ -25,11 +25,15 @@ The system architecture consists of:
   
 #### Evaluation Metrics
 - ***F1 Score***: 0.813: This score indicates a strong balance between precision and recall for the labeling task. An F1 score above 0.8 is generally considered good, suggesting that the model effectively identifies labels while maintaining accuracy.
+- ****F1 score****: the harmonic mean of precision and recall, which combines precision and recall into a single metric, providing equal weight to both. Defined as 2 * (Precision * Recall) / (Precision + Recall)
+
 
 - ***Precision***: 85.5%: This high precision indicates that when the model labels an instance, it is correct 85.5% of the time. This is important in labeling tasks where false positives can lead to misclassification and impact downstream applications.
+- ****Precision****: the proportion of predictions that match the annotations in the test set. Defined as True Positives / (True Positives + False Positives)
 
 - ***Recall***: 77.6%: The recall score indicates that the model correctly identifies 77.6% of all relevant instances (true positives). While this is decent, there is room for improvement, especially if missing relevant labels (false negatives) could significantly affect our use case.
-
+- ****Recall****: the proportion of annotations in the test set that are correctly predicted. Defined as True Positives / (True Positives + False Negatives)
+  
 #### Evaluation Context
 - ***Test Documents***: The model was tested on 39 documents, providing a small but manageable dataset for evaluation.
 

@@ -18,6 +18,9 @@ The system architecture consists of:
   - The first Lambda function sends the uploaded receipt to Google Document AI for parsing.
   - The second Lambda function sends the parsed data to OpenAI for classification and returns the categorized data.
 - **Google Document AI**: A pre-built expense parser model that extracts structured data (vendor name, total amount, date, line items) from receipts.
+- The architecture flow - 
+  <img width="1193" alt="image" src="https://github.com/user-attachments/assets/28a645d8-24d3-49d8-9fd5-7a85556d5ff4">
+
 -------------------------------------------------------------------------------------------------------------------------------------
 #### Fine Tuning Method
 - ##### Supported tuning methods : Vertex AI offers supervised fine-tuning to tailor foundational models to specific needs.

@@ -19,13 +19,13 @@ The system architecture consists of:
   - The second Lambda function sends the parsed data to OpenAI for classification and returns the categorized data.
 - **Google Document AI**: A pre-built expense parser model that extracts structured data (vendor name, total amount, date, line items) from receipts.
 ### Evaluation Metrics
-F1 Score: 0.813: This score indicates a strong balance between precision and recall for the labeling task. An F1 score above 0.8 is generally considered good, suggesting that the model effectively identifies labels while maintaining accuracy.
+- ***F1 Score***: 0.813: This score indicates a strong balance between precision and recall for the labeling task. An F1 score above 0.8 is generally considered good, suggesting that the model effectively identifies labels while maintaining accuracy.
 
 Precision: 85.5%: This high precision indicates that when the model labels an instance, it is correct 85.5% of the time. This is important in labeling tasks where false positives can lead to misclassification and impact downstream applications.
 
 Recall: 77.6%: The recall score indicates that the model correctly identifies 77.6% of all relevant instances (true positives). While this is decent, there is room for improvement, especially if missing relevant labels (false negatives) could significantly affect our use case.
 
-###Evaluation Context
+### Evaluation Context
 Test Documents: The model was tested on 39 documents, providing a small but manageable dataset for evaluation.
 
 Evaluated Documents: All 39 documents were evaluated, showing that there were no issues with the dataset.

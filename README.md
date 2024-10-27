@@ -19,6 +19,8 @@ The system architecture consists of:
   - The second Lambda function sends the parsed data to OpenAI for classification and returns the categorized data.
 - **Google Document AI**: A pre-built expense parser model that extracts structured data (vendor name, total amount, date, line items) from receipts.
 -------------------------------------------------------------------------------------------------------------------------------------
+#### Fine Tuning Method
+
 #### Data Split
 - ***Train Dataset***: Total 234 receipt
 - ***Test Dataset***： Total 46 receipt

@@ -1,6 +1,6 @@
 # Expense Classifier Back End (Vancouver Datajam 2024)
 
-The Expense Classifier is a full-stack, serverless application that combines computer vision and language modelling to automate the classification of business expenses from receipts. The application leverages Google's Document AI to extract and parse structured data from receipt images and then uses OpenAI's language model to classify the expenses into relevant predefined business categories. Finally, users can download the classified expenses in CSV format.
+[Expense AI](https://expense-classifier-frontend.vercel.app/) is a full-stack, serverless application that combines computer vision and language modelling to automate the classification of business expenses from receipts. The application leverages Google's Document AI to extract and parse structured data from receipt images and then uses OpenAI's language model to classify the expenses into relevant predefined business categories. Finally, users can download the classified expenses in CSV format.
 
 ## Problem Statement
 

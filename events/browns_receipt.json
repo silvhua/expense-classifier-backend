@@ -1,0 +1,134 @@
+{
+    "statusCode": 200,
+    "body": {
+      "line_items": [
+        {
+          "id": "6",
+          "mention_text": "4 DIET COKE 4.75",
+          "type": "line_item",
+          "currency_code": "CAD",
+          "units": 4,
+          "nanos": 750000000,
+          "normalized_value": "4.75",
+          "confidence": "99%",
+          "pages": [
+            0
+          ]
+        },
+        {
+          "id": "10",
+          "mention_text": "SERVICE CHARGE 0.86",
+          "type": "line_item",
+          "currency_code": "CAD",
+          "nanos": 860000000,
+          "normalized_value": "0.86",
+          "confidence": "99%",
+          "pages": [
+            0
+          ]
+        },
+        {
+          "id": "13",
+          "mention_text": "S. Bev Tax 0.33",
+          "type": "line_item",
+          "currency_code": "CAD",
+          "nanos": 330000000,
+          "normalized_value": "0.33",
+          "confidence": "98%",
+          "pages": [
+            0
+          ]
+        },
+        {
+          "id": "16",
+          "mention_text": "4.75",
+          "type": "line_item",
+          "currency_code": "CAD",
+          "units": 4,
+          "nanos": 750000000,
+          "normalized_value": "4.75"
+        },
+        {
+          "id": "18",
+          "mention_text": "0.24",
+          "type": "line_item",
+          "currency_code": "CAD",
+          "nanos": 240000000,
+          "normalized_value": "0.24"
+        },
+        {
+          "id": "20",
+          "mention_text": "6.18",
+          "type": "line_item",
+          "currency_code": "CAD",
+          "units": 6,
+          "nanos": 180000000,
+          "normalized_value": "6.18"
+        },
+        {
+          "id": "22",
+          "mention_text": ".75",
+          "type": "line_item"
+        },
+        {
+          "id": "24",
+          "mention_text": "0.02",
+          "type": "line_item",
+          "currency_code": "CAD",
+          "nanos": 20000000,
+          "normalized_value": "0.02"
+        },
+        {
+          "id": "26",
+          "mention_text": "6.20",
+          "type": "line_item",
+          "currency_code": "CAD",
+          "units": 6,
+          "nanos": 200000000,
+          "normalized_value": "6.2"
+        }
+      ],
+      "total_amount": {
+        "id": "1",
+        "mention_text": "6.18",
+        "type": "total_amount",
+        "currency_code": "CAD",
+        "units": 6,
+        "nanos": 180000000,
+        "normalized_value": "6.18"
+      },
+      "supplier_name": {
+        "id": "3",
+        "mention_text": "BROWNS SOCIALHOUSE®",
+        "type": "supplier_name",
+        "normalized_value": "Browns Socialhouse Queen Elizabeth Theatre (QE Theatre)"
+      },
+      "supplier_address": {
+        "id": "4",
+        "mention_text": "649 Cambie Street\nVancouver BC V6B 2P1",
+        "type": "supplier_address",
+        "region_code": "CA",
+        "language_code": "en-US",
+        "postal_code": "V6B 2P1",
+        "administrative_area": "British Columbia",
+        "locality": "Vancouver",
+        "address_lines": "675 Cambie St",
+        "normalized_value": "675 Cambie St Vancouver, BC V6B 2P1 Canada"
+      },
+      "receipt_date": {
+        "id": "5",
+        "mention_text": "8/14/24",
+        "type": "receipt_date",
+        "year": 2024,
+        "month": 8,
+        "day": 14,
+        "normalized_value": "2024-08-14"
+      },
+      "supplier_city": {
+        "id": "29",
+        "mention_text": "",
+        "type": "supplier_city",
+        "normalized_value": "Vancouver"
+      }
+    }
+  }

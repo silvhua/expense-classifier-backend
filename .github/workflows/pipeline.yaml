@@ -135,10 +135,8 @@ jobs:
           path: packaged-prod.yaml
 
   deploy-testing:
-    needs: [build-and-package-dev, build-and-package-prod]
-    if: |
-      (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev') &&
-      (needs.build-and-package-dev.result == 'success' || needs.build-and-package-prod.result == 'success')
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+    needs: [build-and-package-dev]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

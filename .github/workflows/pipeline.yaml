@@ -84,13 +84,13 @@ jobs:
     needs: [build-and-package-dev]
     runs-on: ubuntu-latest
     steps:
-      # - uses: actions/checkout@v3
-      # - uses: aws-actions/setup-sam@v2
-      #   with:
-      #     use-installer: true
+      - uses: actions/checkout@v3
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
 
-      # - name: Build resources
-      #   run: sam build --template ${SAM_TEMPLATE} --use-container
+      - name: Build resources
+        run: sam build --template ${SAM_TEMPLATE} --use-container
 
       # - name: Assume the testing pipeline user role
       #   uses: aws-actions/configure-aws-credentials@v4

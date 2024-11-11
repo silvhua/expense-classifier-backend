@@ -81,38 +81,38 @@ jobs:
 
   build-and-package-prod:
     if: github.ref == 'refs/heads/main'
-    needs: [test]
+    needs: [build-and-package-dev]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: aws-actions/setup-sam@v2
-        with:
-          use-installer: true
+      # - uses: actions/checkout@v3
+      # - uses: aws-actions/setup-sam@v2
+      #   with:
+      #     use-installer: true
 
-      - name: Build resources
-        run: sam build --template ${SAM_TEMPLATE} --use-container
+      # - name: Build resources
+      #   run: sam build --template ${SAM_TEMPLATE} --use-container
 
-      - name: Assume the testing pipeline user role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ env.TESTING_REGION }}
-          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
-          role-session-name: testing-packaging
-          role-duration-seconds: 3600
-          role-skip-session-tagging: true
+      # - name: Assume the testing pipeline user role
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-region: ${{ env.TESTING_REGION }}
+      #     role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
+      #     role-session-name: testing-packaging
+      #     role-duration-seconds: 3600
+      #     role-skip-session-tagging: true
 
-      - name: Upload artifacts to testing artifact buckets
-        run: |
-          sam package \
-            --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
-            --image-repository ${TESTING_IMAGE_REPOSITORY} \
-            --region ${TESTING_REGION} \
-            --output-template-file packaged-testing.yaml
+      # - name: Upload artifacts to testing artifact buckets
+      #   run: |
+      #     sam package \
+      #       --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
+      #       --image-repository ${TESTING_IMAGE_REPOSITORY} \
+      #       --region ${TESTING_REGION} \
+      #       --output-template-file packaged-testing.yaml
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: packaged-testing.yaml
-          path: packaged-testing.yaml
+      # - uses: actions/upload-artifact@v4
+      #   with:
+      #     name: packaged-testing.yaml
+      #     path: packaged-testing.yaml
 
       - name: Assume the prod pipeline user role
         uses: aws-actions/configure-aws-credentials@v4

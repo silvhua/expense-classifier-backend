@@ -16,7 +16,7 @@ env:
   TESTING_PIPELINE_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-dev-pipel-PipelineExecutionRole-DTDndgFQG40N
   TESTING_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionRo-6DXVH5iFbOoX
   TESTING_ARTIFACTS_BUCKET: aws-sam-cli-managed-dev-pipeline-r-artifactsbucket-qnispfd7tk9w
-  TESTING_IMAGE_REPOSITORY: 741448954840.dkr.ecr.us-west-2.amazonaws.com/docker-lambda-datajam
+  TESTING_IMAGE_REPOSITORY: 741448954840.dkr.ecr.us-west-2.amazonaws.com/docker-lambda-datajam-dev
   TESTING_REGION: us-west-2
   PROD_STACK_NAME: datajam-prod
   PROD_PIPELINE_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-HD1r4hlHFI8h
@@ -42,8 +42,43 @@ jobs:
           pip3 install -r src/requirements.txt
           python3 -m pytest tests/unit
 
-  build-and-package:
+  build-and-package-dev:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+
+      - name: Build resources
+        run: sam build --template ${SAM_TEMPLATE} --use-container
+
+      - name: Assume the testing pipeline user role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.TESTING_REGION }}
+          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
+          role-session-name: testing-packaging
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+
+      - name: Upload artifacts to testing artifact buckets
+        run: |
+          sam package \
+            --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
+            --image-repository ${TESTING_IMAGE_REPOSITORY} \
+            --region ${TESTING_REGION} \
+            --output-template-file packaged-testing.yaml
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packaged-testing.yaml
+          path: packaged-testing.yaml
+
+  build-and-package-prod:
+    if: github.ref == 'refs/heads/main'
     needs: [test]
     runs-on: ubuntu-latest
     steps:

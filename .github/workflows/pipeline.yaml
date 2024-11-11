@@ -171,7 +171,11 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-      - name: Force Lambda Update
+      - name: Force Lambda update
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: docker-lambda-datajam
+          IMAGE_TAG: latest
         run: |
           aws lambda update-function-code \
             --function-name arn:aws:lambda:us-west-2:741448954840:function:datajam-dev-ParserFunction-BewEGRzU1yZZ \

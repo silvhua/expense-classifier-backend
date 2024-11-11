@@ -27,9 +27,6 @@ Resources:
           Properties:
             Path: /parse
             Method: post
-      Environment:
-        Variables:
-          GOOGLE_APPLICATION_CREDENTIALS_PATH: clientLibraryConfig-0000.json
       Role: !GetAtt LambdaFunctionRole.Arn
 
   # ClassifyFunction:

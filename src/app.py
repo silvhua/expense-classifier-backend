@@ -39,8 +39,9 @@ def lambda_handler(event, context):
         else:
             payload = event.get('body')
     
-        message = f'Last update: 2024-11-10 23:54'
-        messages.append(message)
+        update_string = f'Last update: 2024-11-10 23:54'
+        print(update_string)
+        messages.append(update_string)
         local_invoke = event.get('direct_local_invoke', None)
         if local_invoke:
             logging_level = logging.DEBUG

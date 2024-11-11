@@ -12,12 +12,14 @@ on:
 
 env:
   SAM_TEMPLATE: template.yaml
+  TESTING_LAMBDA_FUNCTION: arn:aws:lambda:us-west-2:741448954840:function:datajam-dev-ParserFunction-BewEGRzU1yZZ
   TESTING_STACK_NAME: datajam-dev
   TESTING_PIPELINE_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-dev-pipel-PipelineExecutionRole-DTDndgFQG40N
   TESTING_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionRo-6DXVH5iFbOoX
   TESTING_ARTIFACTS_BUCKET: aws-sam-cli-managed-dev-pipeline-r-artifactsbucket-qnispfd7tk9w
   TESTING_IMAGE_REPOSITORY: 741448954840.dkr.ecr.us-west-2.amazonaws.com/docker-lambda-datajam
   TESTING_REGION: us-west-2
+  PROD_LAMBDA_FUNCTION: arn:aws:lambda:us-west-2:741448954840:function:datajam-prod-ParserFunction-hELUOfmyOAbk
   PROD_STACK_NAME: datajam-prod
   PROD_PIPELINE_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-HD1r4hlHFI8h
   PROD_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-PiXgVMpsfpry
@@ -176,9 +178,10 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: docker-lambda-datajam
           IMAGE_TAG: latest
+          FUNCTION_NAME: ${{ env.TESTING_LAMBDA_FUNCTION }}
         run: |
           aws lambda update-function-code \
-            --function-name arn:aws:lambda:us-west-2:741448954840:function:datajam-dev-ParserFunction-BewEGRzU1yZZ \
+            --function-name $FUNCTION_NAME \
             --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Deploy to testing account

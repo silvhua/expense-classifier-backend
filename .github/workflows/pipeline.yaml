@@ -43,7 +43,7 @@ jobs:
           python3 -m pytest tests/unit
 
   build-and-package:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
     needs: [test]
     runs-on: ubuntu-latest
     steps:
@@ -100,7 +100,7 @@ jobs:
           path: packaged-prod.yaml
 
   deploy-testing:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
     needs: [build-and-package]
     runs-on: ubuntu-latest
     steps:

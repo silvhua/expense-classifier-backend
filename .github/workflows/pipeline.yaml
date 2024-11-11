@@ -12,12 +12,14 @@ on:
 
 env:
   SAM_TEMPLATE: template.yaml
+  TESTING_LAMBDA_FUNCTION: arn:aws:lambda:us-west-2:741448954840:function:datajam-dev-ParserFunction-BewEGRzU1yZZ
   TESTING_STACK_NAME: datajam-dev
   TESTING_PIPELINE_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-dev-pipel-PipelineExecutionRole-DTDndgFQG40N
   TESTING_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionRo-6DXVH5iFbOoX
   TESTING_ARTIFACTS_BUCKET: aws-sam-cli-managed-dev-pipeline-r-artifactsbucket-qnispfd7tk9w
   TESTING_IMAGE_REPOSITORY: 741448954840.dkr.ecr.us-west-2.amazonaws.com/docker-lambda-datajam
   TESTING_REGION: us-west-2
+  PROD_LAMBDA_FUNCTION: arn:aws:lambda:us-west-2:741448954840:function:datajam-prod-ParserFunction-hELUOfmyOAbk
   PROD_STACK_NAME: datajam-prod
   PROD_PIPELINE_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-HD1r4hlHFI8h
   PROD_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::741448954840:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-PiXgVMpsfpry
@@ -42,7 +44,42 @@ jobs:
           pip3 install -r src/requirements.txt
           python3 -m pytest tests/unit
 
-  build-and-package:
+  build-and-package-dev:
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+
+      - name: Build resources
+        run: sam build --template ${SAM_TEMPLATE} --use-container
+
+      - name: Assume the testing pipeline user role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.TESTING_REGION }}
+          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
+          role-session-name: testing-packaging
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+
+      - name: Upload artifacts to testing artifact buckets
+        run: |
+          sam package \
+            --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
+            --image-repository ${TESTING_IMAGE_REPOSITORY} \
+            --region ${TESTING_REGION} \
+            --output-template-file packaged-testing.yaml
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packaged-testing.yaml
+          path: packaged-testing.yaml
+
+  build-and-package-prod:
     if: github.ref == 'refs/heads/main'
     needs: [test]
     runs-on: ubuntu-latest
@@ -100,8 +137,8 @@ jobs:
           path: packaged-prod.yaml
 
   deploy-testing:
-    if: github.ref == 'refs/heads/main'
-    needs: [build-and-package]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+    needs: [build-and-package-dev]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -136,6 +173,17 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
+      - name: Force Lambda update
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: docker-lambda-datajam
+          IMAGE_TAG: latest
+          FUNCTION_NAME: ${{ env.TESTING_LAMBDA_FUNCTION }}
+        run: |
+          aws lambda update-function-code \
+            --function-name $FUNCTION_NAME \
+            --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
       - name: Deploy to testing account
         run: |
           sam deploy --stack-name ${TESTING_STACK_NAME} \
@@ -160,7 +208,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     # needs: [integration-test]
     # needs: [build-and-package] # Uncomment if ommitting deploy-testing and integration-test
-    needs: [deploy-testing]
+    needs: [deploy-testing, build-and-package-prod]
     runs-on: ubuntu-latest
     # Configure GitHub Action Environment to have a manual approval step before deployment to production
     # https://docs.github.com/en/actions/reference/environments
@@ -197,6 +245,17 @@ jobs:
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      - name: Force Lambda update
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: docker-lambda-datajam
+          IMAGE_TAG: latest
+          FUNCTION_NAME: ${{ env.PROD_LAMBDA_FUNCTION }}
+        run: |
+          aws lambda update-function-code \
+            --function-name $FUNCTION_NAME \
+            --image-uri $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Deploy to production account
         run: |

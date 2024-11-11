@@ -38,7 +38,7 @@ jobs:
           # trigger the tests here
           export PYTHONPATH=$PYTHONPATH:$(pwd)
           echo 'Running unit tests'
-          pip3 install pytest pytest-mock
+          pip3 install -r tests/requirements.txt
           pip3 install -r src/requirements.txt
           python3 -m pytest tests/unit
 

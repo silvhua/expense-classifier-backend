@@ -78,7 +78,7 @@ def mock_receipt_parser(mocker):
 
 def test_lambda_handler(apigw_event, mock_receipt_parser):
     ret = app.lambda_handler(apigw_event, "")
-    data = json.loads(ret["body"])
+    data = ret["body"]
 
     assert ret["statusCode"] == 200
     assert "total_amount" in ret["body"]

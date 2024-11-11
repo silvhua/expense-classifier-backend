@@ -8,7 +8,7 @@ from src import app
 @pytest.fixture()
 def apigw_event():
     """ Generates API GW Event"""
-    
+
     return {
         "body": {
             "filename": "receipt_costco.jpg"
@@ -63,12 +63,28 @@ def apigw_event():
         "path": "/examplepath",
     }
 
+def mock_receipt_parser(mocker):
+    mock_parser = mocker.patch('src.app.ReceiptParser')
+    parser_instance = mock_parser.return_value
+    parser_instance.parse.return_value = "mocked_receipt"
+    parser_instance.process.return_value = {
+        "total_amount": 123.45,
+        "date": "2023-01-01",
+        "merchant": "Test Store"
+    }
+    
+    return mock_parser
 
-def test_lambda_handler(apigw_event):
-
+def test_lambda_handler(apigw_event, mock_receipt_parser):
     ret = app.lambda_handler(apigw_event, "")
     data = json.loads(ret["body"])
 
     assert ret["statusCode"] == 200
     assert "total_amount" in ret["body"]
-    # assert data["message"] == "hello world"
+    
+    # Verify parser was called correctly
+    mock_receipt_parser.assert_called_once_with(
+        project_id=app.PROJECT_ID,
+        location=app.LOCATION,
+        processor_id=app.PROCESSOR_ID
+    )

@@ -1,5 +1,4 @@
 import sys
-sys.path.append('./src')
 import json
 from Custom_Logger import *
 from ReceiptParser import *

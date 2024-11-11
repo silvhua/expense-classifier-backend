@@ -8,14 +8,11 @@ from src import app
 @pytest.fixture()
 def apigw_event():
     """ Generates API GW Event"""
-    filepath = '../events/event.json'
-
-    with open(filepath) as file:
-        event_body = json.load(file).get('body', '"filename": "receipt_costco.jpg"')
-
-
+    
     return {
-        "body": event_body,
+        "body": {
+            "filename": "receipt_costco.jpg"
+        },
         "resource": "/{proxy+}",
         "requestContext": {
             "resourceId": "123456",

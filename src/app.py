@@ -1,9 +1,15 @@
 import sys
+sys.path.append('./src')
 import json
 from Custom_Logger import *
 from ReceiptParser import *
 # from openai import OpenAIa
 
+
+
+PROJECT_ID = "362542744058"
+LOCATION = "us"  # Format is 'us' or 'eu'
+PROCESSOR_ID = "e781102d22fb3b53"  # Create processor in Cloud Console
 
 def lambda_handler(event, context):
     """Sample pure Lambda function
@@ -42,10 +48,6 @@ def lambda_handler(event, context):
             logging_level = logging.INFO
         logger = Custom_Logger(__name__, level=logging_level)
         logger.info(f'Payload: {payload}\nLocal invoke: {local_invoke}')
-
-        PROJECT_ID = "362542744058"
-        LOCATION = "us"  # Format is 'us' or 'eu'
-        PROCESSOR_ID = "e781102d22fb3b53"  # Create processor in Cloud Console
 
         if payload.get('local_file', False) == True:
             # The local file in your current working directory

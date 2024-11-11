@@ -63,6 +63,7 @@ def apigw_event():
         "path": "/examplepath",
     }
 
+@pytest.fixture
 def mock_receipt_parser(mocker):
     mock_parser = mocker.patch('src.app.ReceiptParser')
     parser_instance = mock_parser.return_value
